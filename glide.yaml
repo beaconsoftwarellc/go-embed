@@ -1,6 +1,6 @@
 package: github.com/anthonyheidenreich/go-embed
 import:
-- package: github.com/Kasita-Inc/gadget
+- package: gitlab.com/beacon-software/gadget
   subpackages:
   - log
 testImport:
