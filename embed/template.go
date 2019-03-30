@@ -32,7 +32,7 @@ func GetTemplates() *template.Template {
     master := template.New("Template")
     {{ range $index, $template := .Templates }}
     // {{ $template.Name }}
-    template.Must(master.New("{{ $template.FileName }}").Parse(string(` + "{{ $template.Data }}" + `)))
+    template.Must(master.New({{ $template.Name }}).Parse(string(` + "{{ $template.Data }}" + `)))
     {{ end }}
     return master
 }

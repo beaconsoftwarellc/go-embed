@@ -29,7 +29,7 @@ func TestTemplateIncludeFile(t *testing.T) {
 	contents := []byte(expected)
 
 	err := module.EmbedFile(fileName, contents)
-	assert.Equal(templateContext{Name: fileName, Data: strconv.Quote(expected)}, module.Context.Templates[0])
+	assert.Equal(templateContext{Name: "TestTpl", FileName: fileName, Data: strconv.Quote(expected)}, module.Context.Templates[0])
 	assert.NoError(err)
 }
 
