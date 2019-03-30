@@ -3,12 +3,18 @@ package embed
 import (
 	"io"
 	"strconv"
+	"strings"
 	"text/template"
 
-	"github.com/anthonyheidenreich/gadget/log"
+	"gitlab.com/beacon-software/gadget/log"
+	"gitlab.com/beacon-software/gadget/stringutil"
 )
 
-const defaultPackageName = "templates"
+const (
+	defaultPackageName = "templates"
+	// TemplateSuffix for files to consider as template files for embedding.
+	TemplateSuffix = "tmpl"
+)
 
 var templatesTemplate = template.Must(template.New("template").Parse(`package {{ .PackageName }}
 
@@ -16,20 +22,26 @@ var templatesTemplate = template.Must(template.New("template").Parse(`package {{
 
 import "text/template"
 
+const ({{ range $index, $template := .Templates }}
+	// {{ $template.Name }} name of template from file {{ $template.FileName }}
+	{{ $template.Name }} = "{{ $template.FileName }}"{{ end }}
+)
+
 // GetTemplates returns a template that has the all the other templates parsed into it accessible via their filename.
 func GetTemplates() *template.Template {
     master := template.New("Template")
     {{ range $index, $template := .Templates }}
     // {{ $template.Name }}
-    template.Must(master.New("{{ $template.Name }}").Parse(string(` + "{{ $template.Data }}" + `)))
+    template.Must(master.New("{{ $template.FileName }}").Parse(string(` + "{{ $template.Data }}" + `)))
     {{ end }}
     return master
 }
 `))
 
 type templateContext struct {
-	Name string
-	Data string
+	Name     string
+	FileName string
+	Data     string
 }
 
 type context struct {
@@ -53,8 +65,9 @@ type templateEmbedder struct {
 
 func (module *templateEmbedder) EmbedFile(fileName string, contents []byte) error {
 	module.Context.Templates = append(module.Context.Templates, templateContext{
-		Name: fileName,
-		Data: strconv.Quote(string(contents)),
+		Name:     stringutil.UpperCamelCase(strings.Split(fileName, TemplateSuffix)[0]),
+		FileName: fileName,
+		Data:     strconv.Quote(string(contents)),
 	})
 	return nil
 }

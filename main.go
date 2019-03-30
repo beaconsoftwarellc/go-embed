@@ -7,13 +7,11 @@ import (
 	"os"
 	"strings"
 
-	"github.com/anthonyheidenreich/gadget/log"
-	"github.com/anthonyheidenreich/go-embed/embed"
+	"gitlab.com/beacon-software/gadget/log"
+	"gitlab.com/beacon-software/go-embed/embed"
 )
 
 const (
-	suffix = ".tmpl"
-
 	// EmbedderTypeTemplate is the name of the template embedder module
 	EmbedderTypeTemplate = "template"
 )
@@ -65,9 +63,9 @@ func main() {
 		os.Exit(2)
 	}
 	fs, _ := ioutil.ReadDir(directory)
-	log.Infof("looking for includes matching '%s * %s'", directory, suffix)
+	log.Infof("looking for includes matching '%s * %s'", directory, embed.TemplateSuffix)
 	for _, f := range fs {
-		if strings.HasSuffix(f.Name(), suffix) {
+		if strings.HasSuffix(f.Name(), embed.TemplateSuffix) {
 			filepath := directory + f.Name()
 			bytes, err := ioutil.ReadFile(filepath)
 			if nil != err {
