@@ -6,8 +6,8 @@ import (
 	"strings"
 	"text/template"
 
-	"gitlab.com/beacon-software/gadget/log"
-	"gitlab.com/beacon-software/gadget/stringutil"
+	"github.com/beaconsoftwarellc/gadget/log"
+	"github.com/beaconsoftwarellc/gadget/stringutil"
 )
 
 const (

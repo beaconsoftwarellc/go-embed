@@ -7,8 +7,8 @@ import (
 	"os"
 	"strings"
 
-	"gitlab.com/beacon-software/gadget/log"
-	"gitlab.com/beacon-software/go-embed/embed"
+	"github.com/beaconsoftwarellc/gadget/log"
+	"github.com/beaconsoftwarellc/go-embed/embed"
 )
 
 const (
