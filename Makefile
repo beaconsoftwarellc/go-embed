@@ -1,13 +1,19 @@
-setup:
-	go get -u github.com/Masterminds/glide
-	go install github.com/Masterminds/glide
+.PHONY: help unit dist install
 
-update: setup
-	glide cc
-	glide update --strip-vendor
+SRC_FILES := $(shell find . -iname "*.go" )
 
-get: setup
-	glide install --strip-vendor
+all: unit
 
-test: get
+help:
+	@echo "Please use \`make <target>' where <target> is one of"
+	@echo "  unit                    run unit tests"
+	@echo "  install                 install artifact on local path"
+	@exit 1
+
+unit:
+	@echo "go test package"
+	go mod tidy
 	go test -cover -p 1 ./...
+
+install: unit
+	go install github.com/beaconsoftwarellc/go-embed
