@@ -1,6 +1,6 @@
 # go-embed
 Embeds text files into Go applications
-
+```
 Usage of go-embed:
 	include [flags] [module] [directory] [output]
 Arguments:
@@ -10,3 +10,4 @@ Arguments:
 Flags:
   -p string
     	the package name to use for the created go file
+```
