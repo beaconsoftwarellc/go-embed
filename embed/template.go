@@ -6,8 +6,8 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/beaconsoftwarellc/gadget/log"
-	"github.com/beaconsoftwarellc/gadget/stringutil"
+	"gitlab.com/beacon-software/gadget/log"
+	"gitlab.com/beacon-software/gadget/stringutil"
 )
 
 const (
@@ -20,16 +20,49 @@ var templatesTemplate = template.Must(template.New("template").Parse(`package {{
 
 // THIS IS A GENERATED FILE. DO NOT MODIFY
 
-import "text/template"
+import (
+	"os"
+	"path"
+	"text/template"
+)
 
 const ({{ range $index, $template := .Templates }}
 	// {{ $template.Name }} name of template from file {{ $template.FileName }}
 	{{ $template.Name }} = "{{ $template.FileName }}"{{ end }}
 )
 
+// Template for creating a structured file given a context and a path.
+type Template struct {
+	// Name of the template within the template collection.
+	Name string
+}
+
+// GetName of this template
+func (t *Template) GetName() string {
+	return t.Name
+}
+
+// Execute this template writing the output data to the passed outputPath which will be joined
+// using path.
+func (t *Template) Execute(context interface{}, fileMode os.FileMode, outputPath ...string) error {
+	outputFileName := path.Join(outputPath...)
+	fd, err := os.OpenFile(outputFileName, os.O_RDWR|os.O_CREATE|os.O_TRUNC, os.FileMode(fileMode))
+	if nil != err {
+		return err
+	}
+	defer fd.Close()
+	templates := GetTemplates()
+	return templates.ExecuteTemplate(fd, t.Name, context)
+}
+
+var ({{ range $index, $template := .Templates }}
+	// {{ $template.Name }}Template from file {{ $template.FileName }}
+	{{ $template.Name }}Template = &Template{Name: {{ $template.Name }} }{{ end }}
+)
+
 // GetTemplates returns a template that has the all the other templates parsed into it accessible via their filename.
 func GetTemplates() *template.Template {
-    master := template.New("Template")
+    master := template.New("{{ $.PackageName }}Template")
     {{ range $index, $template := .Templates }}
     // {{ $template.Name }}
     template.Must(master.New({{ $template.Name }}).Parse(string(` + "{{ $template.Data }}" + `)))
