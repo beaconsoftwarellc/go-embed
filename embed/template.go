@@ -50,7 +50,7 @@ func (t *Template) Execute(context interface{}, fileMode os.FileMode, outputPath
 	if nil != err {
 		return err
 	}
-	defer func() { _ = fd.Close() }
+	defer func() { _ = fd.Close() }()
 	templates := GetTemplates()
 	return templates.ExecuteTemplate(fd, t.Name, context)
 }
