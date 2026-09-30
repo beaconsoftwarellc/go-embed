@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/beaconsoftwarellc/gadget/generator"
+	"github.com/beaconsoftwarellc/gadget/v2/generator"
 	"github.com/stretchr/testify/assert"
 )
 
