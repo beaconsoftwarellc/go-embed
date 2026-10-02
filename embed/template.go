@@ -6,8 +6,8 @@ import (
 	"strings"
 	"text/template"
 
-	"gitlab.com/beacon-software/gadget/log"
-	"gitlab.com/beacon-software/gadget/stringutil"
+	"github.com/beaconsoftwarellc/gadget/v2/log"
+	"github.com/beaconsoftwarellc/gadget/v2/stringutil"
 )
 
 const (
@@ -50,7 +50,7 @@ func (t *Template) Execute(context interface{}, fileMode os.FileMode, outputPath
 	if nil != err {
 		return err
 	}
-	defer fd.Close()
+	defer func() { _ = fd.Close() }()
 	templates := GetTemplates()
 	return templates.ExecuteTemplate(fd, t.Name, context)
 }
